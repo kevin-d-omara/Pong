@@ -1,7 +1,7 @@
 allGameObjects = {}
 
 GameObject = {}
-function GameObject:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, shape, color)
+function GameObject:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, color)
     local obj = {}
     obj.x = x or 0
     obj.y = y or 0
@@ -11,9 +11,8 @@ function GameObject:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, heigh
     obj.maxspeedy = maxspeedy or 0
     obj.width = width or 10
     obj.height = height or 10
-    obj.shape = shape or "rectangle"
     obj.color = {}
-    for k, v in ipairs(color) do
+    for k, v in ipairs(color or {}) do
         obj.color[k] = v or 255
     end
     
@@ -25,11 +24,7 @@ end
 
 function GameObject:draw()
     love.graphics.setColor(self.color[1],self.color[2],self.color[3],self.color[4])
-    if self.shape == "rectangle" then
-        love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-    elseif self.shape == "circle" then
-        love.graphics.circle("fill", self.x, self.y, self.height/2, 50) 
-    end
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
 
 function GameObject:move(dt)
@@ -47,10 +42,3 @@ function GameObject.limitSpeed(speed, maxspeed)
     end
     return speed
 end
-
-function spawnBall()
-    local initSpeedX = 300 * (math.random() < 0.5 and 1 or -1)
-    local initSpeedY = math.random() < 0.5 and math.random(25,300) or math.random(-25,-300)
-    ball = GameObject:new(window.width/2-5, window.height/2-5, initSpeedX, initSpeedY, 300, 750, 10, 10, "circle", {51,204,51,255})
-end
-spawnBall()
