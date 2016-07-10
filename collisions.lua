@@ -12,19 +12,23 @@ function checkForCollisions()
         if CheckCollision(ball.x,ball.y,ball.width,ball.height, paddle.x, paddle.y, paddle.width, paddle.height) then
             ball.speedx = -1 * ball.speedx      -- invert x-direction
             ball.speedy = ball.speedy + 1/2*paddle.speedy
+            ball.bounce()
         end
     end
     
     -- ball -> top/bottom of screen
     if ball.y < 0 or ball.y + ball.height > window.height then
         ball.speedy = -1 * ball.speedy          -- invert y-direction
+        ball.bounce()
     end
     
     -- ball -> left/right of screen
-    if ball.x < 0 then
+    if ball.x < -10 then
         scorePoint(player2)
-    elseif ball.x + ball.width > window.width then
+        ball.score()
+    elseif ball.x + ball.width > window.width + 10 then
         scorePoint(player1)
+        ball.score()
     end
     
     -- paddle -> top/bottom of screen
@@ -33,9 +37,11 @@ function checkForCollisions()
         if paddle.y < 0 then
             paddle.speedy = 0
             paddle.y = paddle.y + 10
+            paddle:bounceWall()
         elseif paddle.y + paddle.height > window.height then
             paddle.speedy = 0
             paddle.y = paddle.y - 10
+            paddle:bounceWall()
         end
     end
 end
@@ -43,5 +49,5 @@ end
 function scorePoint(player)
     player.score = player.score + 1
     allGameObjects["ball"] = nil
-    spawnBall()
+    Ball:spawnBall()
 end
