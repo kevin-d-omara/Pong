@@ -49,7 +49,8 @@ table.insert(menu.pages.menu, menu.entry("Menu", 0, 80, {255,255,255,255}, title
 table.insert(menu.pages.menu, menu.entry("Start", 0, 170, {255,255,255,255}, optionFont, true))
     menu.pages.menu[2].key.enter = function()
         gamestate = "ingame"
-        music.fadeTo(music.ingameAmbience, .6, .6)
+        music.fadeOut(music.current, .6)
+        music.fadeIn(music.ingameAmbience, .6, .6)
     end
 table.insert(menu.pages.menu, menu.entry("Options", 0, 240, {255,255,255,255}, optionFont, false))
     menu.pages.menu[3].key.enter = menu.pages.goTo(menu.pages.options)

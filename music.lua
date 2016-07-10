@@ -9,22 +9,11 @@ music.gameEnd = love.audio.newSource("sounds/game-end.wav", "static")
 
 musicStack = {}     -- to control fade in/out effects
 
-function music:fadeTo(song)
-    love.audio.pause(self.current)
-    love.audio.rewind(self.current)
-    self[song]:play()
-end
-
-function music.fadeTo(song, volume, time)
-    table.insert(musicStack, music.fadeOut(music.current, time))
-    table.insert(musicStack, music.fadeIn(song, time, volume))
-end
-
 function music.fadeOut(song, time)
     local volume = love.audio.getVolume(song)
     local factor = volume/time
     
-    return function(dt)
+    table.insert(musicStack, function(dt)
         volume = volume - factor * dt
         if volume <= 0 then
             song:pause()
@@ -32,7 +21,8 @@ function music.fadeOut(song, time)
         else
             song:setVolume(volume)
         end
-    end
+        --print("out volume: ", love.audio.getVolume(song))
+    end)
 end
 
 function music.fadeIn(song, time, maxVolume)
@@ -42,7 +32,7 @@ function music.fadeIn(song, time, maxVolume)
     song:setLooping(true)
     song:play()
     
-    return function(dt)
+    table.insert(musicStack, function(dt)
         volume = volume + factor * dt
         if volume >= maxVolume then
             song:setVolume(maxVolume)
@@ -50,7 +40,8 @@ function music.fadeIn(song, time, maxVolume)
         else
             song:setVolume(volume)
         end
-    end
+        --print("in volume: ", love.audio.getVolume(song))
+    end)
 end
 
 
