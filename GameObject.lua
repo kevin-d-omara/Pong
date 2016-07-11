@@ -1,4 +1,9 @@
 allGameObjects = {}
+function allGameObjects:remove(val)
+    for k, v in ipairs(self) do
+        if v == val then table.remove(self, k) end
+    end
+end
 
 GameObject = {}
 function GameObject:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, color)
