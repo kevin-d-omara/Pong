@@ -1,11 +1,12 @@
 --[[
     By Kevin O'Mara
-    Version 0.2.2
+    Version 0.2.1
 --]]
 
 -- original pong: https://www.youtube.com/watch?v=it0sf4CMDeM
 
 -- TODO:
+--      - shader at gameover
 --      - background??
 --      - 'package' up; test cross platform-ness via Linux
 --      ???
@@ -38,8 +39,30 @@ function love.keypressed(key, _, isrepeat)
     elseif gamestate == "menu" then
         menu.keypressed(key)
     elseif gamestate == "gameover" then
-        -- do nothing
+        if key == 'space' then
+            resetGame()
+            gamestate = "ingame"
+        elseif key == 'backspace' then
+            resetGame()
+            
+            -- fade ingame music over to menu music
+            music.fadeOut(music.current, .6)
+            music.fadeIn(music.intro, .6)
+            music.current = music.intro
+            
+            gamestate = "menu"
+        elseif key == 'escape' then
+            love.event.quit()
+        end
     end
+end
+
+function resetGame()
+    player1.score = 0
+    player2.score = 0
+    player1.paddle.y = window.height/2-30
+    player2.paddle.y = window.height/2-30
+    Ball:spawnBall()
 end
 
 function love.update(dt)
@@ -63,6 +86,15 @@ function love.update(dt)
         end
         
         checkForCollisions()
+        
+        -- check win condition
+        if player1.score >= maxScore or player2.score >= maxScore then
+            gamestate = "gameover"
+            winner = player1.score >= maxScore and player1 or player2
+            for k, v in ipairs(allGameObjects) do
+                if v == ball then table.remove(allGameObjects, k) end   -- remove ball
+            end
+        end
     elseif gamestate == "menu" then
         -- do nothing
     elseif gamestate == "gameover" then
@@ -83,7 +115,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    if gamestate == "ingame" then
+    if gamestate == "ingame" then        
         for _, obj in ipairs(allGameObjects) do
             obj:draw()
         end
@@ -91,13 +123,42 @@ function love.draw()
         drawDashedLine('y', window.width/2-2, 0, 4, window.height/19, 19, {255,255,255,255})
         
         -- display score
+        love.graphics.setFont(optionFont)
         local score = string.format("%.2d   %.2d", player1.score, player2.score)
         love.graphics.setColor(204,0,204,255)
         love.graphics.printf(score, 0, 35, window.width, 'center')
     elseif gamestate == "menu" then
         menu.display(menu.pages.current)
+        --love.graphics.draw(keys_wasd, 0, 0, 0, .1, .1)
     elseif gamestate == "gameover" then
+        love.graphics.setColor(255,255,255,255)
+        love.graphics.setFont(gameoverFont)
+        local offset = winner == player1 and -1 or 1
+        love.graphics.printf("WIN", 135*offset, 70, window.width, 'center')
         
+        love.graphics.setFont(optionFont)
+        love.graphics.printf("Play Again?", 135*offset, 145, window.width, 'center')
+        love.graphics.printf("Menu", 135*offset, 225, window.width, 'center')
+        love.graphics.printf("Exit", 135*offset, 305, window.width, 'center')
+        
+        love.graphics.setFont(subOptionFont)
+        love.graphics.printf("(spacebar)", 135*offset, 185, window.width, 'center')
+        love.graphics.printf("(backspace)", 135*offset, 265, window.width, 'center')
+        love.graphics.printf("(escape)", 135*offset, 345, window.width, 'center')
+        
+        -- shader to fade these; or just adjust alpha :P)
+        for _, obj in ipairs(allGameObjects) do
+            obj:draw()
+        end
+        
+        drawDashedLine('y', window.width/2-2, 0, 4, window.height/19, 19, {255,255,255,255})
+        
+        -- display score
+        love.graphics.setFont(optionFont)
+        local score = string.format("%.2d   %.2d", player1.score, player2.score)
+        love.graphics.setColor(204,0,204,255)
+        love.graphics.printf(score, 0, 35, window.width, 'center')
+        --
     end
 end
 

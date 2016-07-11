@@ -38,7 +38,7 @@ function music.fadeOut(song, time)
     table.insert(musicQueue, function(dt)
         volume = volume - factor * dt
         if volume <= 0 then
-            song:pause()
+            song:stop()
             return false
         else
             song:setVolume(volume)

@@ -1,3 +1,6 @@
+-- graphics
+--keys_wasd = love.graphics.newImage("graphics/keys_cluster_wasd.png")
+
 require "Selector"
 
 menu = {}
@@ -53,6 +56,7 @@ table.insert(menu.pages.menu, menu.entry("Start", 0, 160, {255,255,255,255}, opt
         gamestate = "ingame"
         music.fadeOut(music.current, .6)
         music.fadeIn(music.ingameAmbience, .6)
+        music.current = music.ingameAmbience
     end
 table.insert(menu.pages.menu, menu.entry("Options", 0, 230, {255,255,255,255}, optionFont, false))
     menu.pages.menu[3].key.enter = menu.pages.goTo(menu.pages.options)
