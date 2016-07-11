@@ -48,6 +48,6 @@ end
 
 function scorePoint(player)
     player.score = player.score + 1
-    allGameObjects["ball"] = nil
+    allGameObjects:remove(ball)
     Ball:spawnBall()
 end
