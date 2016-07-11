@@ -11,5 +11,5 @@ function Paddle:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, c
 end
 
 function Paddle:bounceWall()
-    table.insert(soundStack, self.bassBounce)
+    table.insert(soundQueue, self.bassBounce)
 end
