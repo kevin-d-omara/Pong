@@ -7,6 +7,7 @@ table.remove(allGameObjects)  -- don't want prototype in object list
 
 function Ball:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, color)
     local obj = GameObject:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, color)
+    obj.parent = Ball
     
     setmetatable(obj,self)
     self.__index = self
@@ -15,9 +16,9 @@ end
 
 
 function Ball:spawnBall()
-    local initSpeedX = 300 * (math.random() < 0.5 and 1 or -1)
+    local initSpeedX = 400 * (math.random() < 0.5 and 1 or -1)
     local initSpeedY = math.random() < 0.5 and math.random(25,150) or math.random(-25,-150)
-    ball = self:new(window.width/2-5, window.height/2-5, initSpeedX, initSpeedY, 300, 450, 12, 12, {51,204,51,255})
+    ball = self:new(window.width/2-5, window.height/2-5, initSpeedX, initSpeedY, 400, 500, 15, 15, {51,204,51,255})
 end
 Ball:spawnBall()
 
