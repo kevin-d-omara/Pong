@@ -6,8 +6,9 @@ window.width, window.height, window.flags = love.window.getMode()
 math.randomseed( tonumber(tostring(os.time()):reverse():sub(1,6)) )
 love.keyboard.setKeyRepeat(true)
 
-scoreFont = love.graphics.newFont(36)   -- TODO: remove
+gameoverFont = love.graphics.newFont(56)
 titleFont = love.graphics.newFont(36)
 optionFont = love.graphics.newFont(28)
 subOptionFont = love.graphics.newFont(20)
-love.graphics.setFont(scoreFont)
+
+maxScore = 10
