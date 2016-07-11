@@ -31,11 +31,11 @@ end
 function Ball.bounce()
     --local bassBounce = love.audio.newSource("sounds/deep-bass-bounce.wav", "static")
     local bassBounce = love.audio.newSource("sounds/ball-bounce.mp3", "static")
-    table.insert(soundStack, bassBounce)
+    table.insert(soundQueue, bassBounce)
 end
 
 function Ball.score()
     local pointScored = love.audio.newSource("sounds/point-scored.wav", "static")
     pointScored:setPitch(3)
-    table.insert(soundStack, pointScored)
+    table.insert(soundQueue, pointScored)
 end
