@@ -1,19 +1,41 @@
-music = {}
-music.intro = love.audio.newSource("sounds/intro.wav", "static")
-    music.intro:setVolume(.4)
-    music.intro:setLooping(true)
+allSongs = {}
+allSongs.volume = 1
+
+function allSongs:setVolume(vol)
+    -- volume must be [0:1]
+    if vol > 1 then vol = 1 end
+    if vol < 0 then vol = 0 end
+    
+    self.volume = vol
+    for _, v in ipairs(allSongs) do
+        local min, max = v.song:getVolumeLimits()
+        v.song:setVolumeLimits(min, v.max*self.volume)
+        v.song:setVolume(v.max*self.volume)
+    end
+end
+
+function newSong(path, min, max)
+    local song = love.audio.newSource(path)
+    song:setVolumeLimits(min, max)
+    song:setLooping(true)
+    table.insert(allSongs, {song = song, max = max})    -- max stored as reference for allSongs:setVolume(vol) function
+    return song
+end
+
+music = {}      -- note: music is streamed, not static, because the files are larger
+music.intro = newSong("sounds/intro.wav", 0, .4)
     music.intro:play()
     music.current = music.intro
-music.ingameAmbience = love.audio.newSource("sounds/ingame-ambience.wav", "static")
-music.gameEnd = love.audio.newSource("sounds/game-end.wav", "static")
+music.ingameAmbience = newSong("sounds/ingame-ambience.wav", 0, .6)    
+music.gameEnd = newSong("sounds/game-end.wav", 0, 1)
 
-musicStack = {}     -- to control fade in/out effects
+musicQueue = {}     -- to control fade in/out effects
 
 function music.fadeOut(song, time)
-    local volume = love.audio.getVolume(song)
+    local volume = song:getVolume()
     local factor = volume/time
     
-    table.insert(musicStack, function(dt)
+    table.insert(musicQueue, function(dt)
         volume = volume - factor * dt
         if volume <= 0 then
             song:pause()
@@ -21,18 +43,17 @@ function music.fadeOut(song, time)
         else
             song:setVolume(volume)
         end
-        --print("out volume: ", love.audio.getVolume(song))
     end)
 end
 
-function music.fadeIn(song, time, maxVolume)
+function music.fadeIn(song, time)
     local volume = 0
+    local _, maxVolume = song:getVolumeLimits()
     local factor = maxVolume/time
     song:setVolume(0)
-    song:setLooping(true)
     song:play()
     
-    table.insert(musicStack, function(dt)
+    table.insert(musicQueue, function(dt)
         volume = volume + factor * dt
         if volume >= maxVolume then
             song:setVolume(maxVolume)
@@ -40,18 +61,5 @@ function music.fadeIn(song, time, maxVolume)
         else
             song:setVolume(volume)
         end
-        --print("in volume: ", love.audio.getVolume(song))
     end)
 end
-
-
---[[
-Audio API
-
-love.audio.pause()
-love.audio.play( source)     /   Source:play()
-love.audio.resume()
-love.audio.rewind()
-
-love.audio.setVolume()    -- master volume
---]]
