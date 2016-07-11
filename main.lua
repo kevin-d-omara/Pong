@@ -6,41 +6,51 @@
 -- original pong: https://www.youtube.com/watch?v=it0sf4CMDeM
 
 -- TODO:
---      - sound effects (ambient, collision, point scored)
 --      - background??
 --      - 'package' up; test cross platform-ness via Linux
 --      ???
 --      profit
 
 function love.load()
-    math.randomseed( tonumber(tostring(os.time()):reverse():sub(1,6)) )
-    
-    -- sound stack
-    soundStack = {}
+    -- queues
+    soundQueue = {}
+    eventQueue = {}
     
     -- requires
     require "config"
     require "music"
-    require "menu"
-    require "Selector"
     require "GameObject"
     require "Paddle"
     require "Player"
     require "Ball"
     require "collisions"
-
---[[
-    ingameAmbience:setVolume(.3)
-    ingameAmbience:setLooping(true)
-    ingameAmbience:play()
---]]    
+    require "menu"
+    require "Selector"
     
     -- gamestate => menu -> ingame -> (paused) -> gameover
     gamestate = "menu"
     isPaused = false
 end
 
+function love.keypressed(key, _, isrepeat)
+    if gamestate == "ingame" then
+        -- do nothing
+    elseif gamestate == "menu" then
+        menu.keypressed(key)
+    elseif gamestate == "gameover" then
+        -- do nothing
+    end
+end
+
 function love.update(dt)
+    --[[ events
+    for k, event in ipairs(eventQueue) do
+        if event() == false then
+            table.remove(eventQueue, k)
+        end
+    end
+    --]]
+    
     if gamestate == "ingame" then
         -- player input
         for _, player in ipairs(allPlayers) do
@@ -54,23 +64,21 @@ function love.update(dt)
         
         checkForCollisions()
     elseif gamestate == "menu" then
-        function love.keypressed(key)
-            menu.keypressed(key)
-        end
+        -- do nothing
     elseif gamestate == "gameover" then
-        
+        -- do nothing        
     end
     
     -- audio
-    for k, update in ipairs(musicStack) do
+    for k, update in ipairs(musicQueue) do
         if update(dt) == false then
-            table.remove(musicStack, k)
+            table.remove(musicQueue, k)
         end
     end
     
-    for k, sound in ipairs(soundStack) do
+    for k, sound in ipairs(soundQueue) do
         sound:play()
-        soundStack[k] = nil
+        soundQueue[k] = nil
     end
 end
 
@@ -110,9 +118,3 @@ function drawDashedLine(x_y, x, y, w, h, n, color)
         love.graphics.rectangle("fill", tx, ty, w, h)
     end
 end
-
-
-
-
-
-
