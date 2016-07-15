@@ -20,7 +20,7 @@ function Ball:spawnBall(player)
     local dir = player == player1 and -1 or 1
     local initSpeedX = limit * dir
     local initSpeedY = math.random() < 0.5 and math.random(25,150) or math.random(-25,-150)
-    ball = self:new(window.width/2-5, window.height/2-5, initSpeedX, initSpeedY, limit, limit, 16, 16, {51,204,51,255})
+    ball = self:new(window.width/2-8, window.height/2-8, initSpeedX, initSpeedY, limit, limit, 16, 16, {51,204,51,255})
 end
 Ball:spawnBall(player1)
 
