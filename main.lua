@@ -1,9 +1,9 @@
 --[[
     By Kevin O'Mara
-    Version 0.3.0
+    Version 0.3.1
 --]]
 
--- original pong: https://www.youtube.com/watch?v=it0sf4CMDeM
+-- based on: http://www.ponggame.org/
 
 -- TODO:
 --      - shader at gameover
@@ -120,7 +120,7 @@ function love.draw()
             obj:draw()
         end
         
-        drawDashedLine('y', window.width/2-2, 0, 4, window.height/19, 19, {255,255,255,255})
+        drawDashedLine('y', window.width/2-2, 0, 4, window.height/31, 31, {255,255,255,255})
         
         -- display score
         love.graphics.setFont(optionFont)
@@ -151,7 +151,7 @@ function love.draw()
             obj:draw()
         end
         
-        drawDashedLine('y', window.width/2-2, 0, 4, window.height/19, 19, {255,255,255,255})
+        drawDashedLine('y', window.width/2-2, 0, 4, window.height/31, 31, {255,255,255,255})
         
         -- display score
         love.graphics.setFont(optionFont)

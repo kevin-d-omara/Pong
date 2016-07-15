@@ -14,13 +14,15 @@ function Ball:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, col
     return obj
 end
 
-
-function Ball:spawnBall()
-    local initSpeedX = 400 * (math.random() < 0.5 and 1 or -1)
+-- player denotes which direction the ball will spawn travelling towards
+function Ball:spawnBall(player)
+    local limit = 570
+    local dir = player == player1 and -1 or 1
+    local initSpeedX = limit * dir
     local initSpeedY = math.random() < 0.5 and math.random(25,150) or math.random(-25,-150)
-    ball = self:new(window.width/2-5, window.height/2-5, initSpeedX, initSpeedY, 400, 500, 15, 15, {51,204,51,255})
+    ball = self:new(window.width/2-5, window.height/2-5, initSpeedX, initSpeedY, limit, limit, 16, 16, {51,204,51,255})
 end
-Ball:spawnBall()
+Ball:spawnBall(player1)
 
 --[[
 function Ball:draw()    -- overwrite parent default: rectangle

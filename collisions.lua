@@ -71,5 +71,5 @@ end
 function scorePoint(player)
     player.score = player.score + 1
     allGameObjects:remove(ball)
-    Ball:spawnBall()
+    Ball:spawnBall(player)
 end
