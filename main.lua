@@ -1,6 +1,6 @@
 --[[
     By Kevin O'Mara
-    Version 0.2.3
+    Version 0.3.0
 --]]
 
 -- original pong: https://www.youtube.com/watch?v=it0sf4CMDeM
