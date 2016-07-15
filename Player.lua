@@ -24,8 +24,8 @@ function Player:checkIfKeyIsDown(dt)
 end
 
 -- todo: change controls to 'a-z' & 'k-m'
-paddle1 = Paddle:new(10, window.height/2-30, 0, 0, 0, 475, 8, 60, {255,0,0,255})
+paddle1 = Paddle:new("left", {255,0,0,255})
 player1 = Player:new(paddle1, "w", "s")
 
-paddle2 = Paddle:new(window.width-18, window.height/2-30, 0, 0, 0, 475, 8, 60, {0,0,255,255})
+paddle2 = Paddle:new("right", {0,0,255,255})
 player2 = Player:new(paddle2, "up", "down")
