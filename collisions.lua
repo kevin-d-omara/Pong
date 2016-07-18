@@ -33,11 +33,11 @@ function checkForCollisions(dt)
                 b = ball.maxspeedy * (-.2)          -- (2 * 3/10 - 4/5)
             end
             ball.speedy = m * math.abs(bMid) + b    -- "f(x) = m*x + b"
-            local sign = paddle == paddle1 and 1 or -1
             
             -- prevent ball from getting stuck in paddle
             ball:move(dt)
             if checkCollision(ball.x,ball.y,ball.width,ball.height, paddle.x, paddle.y, paddle.width, paddle.height) then
+                local sign = paddle == paddle1 and 1 or -1
                 ball.x = paddle.x + sign * (paddle.width + 1)
             end
         end
@@ -46,6 +46,7 @@ function checkForCollisions(dt)
     -- ball -> top/bottom of screen
     if ball.y < 0 or ball.y + ball.height > window.height then
         ball.speedy = -1 * ball.speedy          -- invert y-direction
+        ball:move(dt)   -- prevent ball from getting stuck in wall
         ball.bounce()
     end
     
