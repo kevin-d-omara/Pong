@@ -1,6 +1,6 @@
 --[[
     By Kevin O'Mara
-    Version 0.3.2
+    Version 0.3.3
 --]]
 
 -- based on: http://www.ponggame.org/
@@ -85,7 +85,7 @@ function love.update(dt)
             obj:move(dt)
         end
         
-        checkForCollisions()
+        checkForCollisions(dt)
         
         -- check win condition
         if player1.score >= maxScore or player2.score >= maxScore then
