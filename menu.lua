@@ -153,3 +153,14 @@ end
 function menu.highlight(text)
     return "-->   "..text.."   <--"
 end
+
+function menu.showControls()
+    -- show menu controls:
+    love.graphics.setFont(subOptionFont)
+    love.graphics.draw(keys_arrow, 0, 0, 0, .1, .1)     -- left side
+    love.graphics.print("menu control", 10, 100)
+    love.graphics.draw(keys_enter, 568, 2, 0, .1, .1)   -- right side
+    love.graphics.print("select", 578, 52)
+    love.graphics.draw(keys_backspace, 568, 92, 0, .1, .1)
+    love.graphics.print("go back", 568, 142)
+end
