@@ -1,5 +1,4 @@
 love.window.setTitle("Pong")
---love.window.setMode(600, 400)
 love.window.setMode(650, 470)
 window = {}
 window.width, window.height, window.flags = love.window.getMode()

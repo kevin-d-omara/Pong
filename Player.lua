@@ -23,7 +23,6 @@ function Player:checkIfKeyIsDown(dt)
     end
 end
 
--- todo: change controls to 'a-z' & 'k-m'
 paddle1 = Paddle:new("left", {255,0,0,255})
 player1 = Player:new(paddle1, "w", "s")
 

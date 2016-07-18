@@ -1,8 +1,6 @@
 Paddle = GameObject:new()
 table.remove(allGameObjects)  -- don't want prototype in object list
 
---window.width-18
-
 function Paddle:new(side, color)
     local width = 16
     local height = 80

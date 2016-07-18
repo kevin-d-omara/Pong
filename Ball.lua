@@ -1,6 +1,3 @@
--- TODO: make collisions based on angle/edges (i.e. original Pong)
---       ^ include varying y-force based on this too
-
 -- define ball object; child of game object
 Ball = GameObject:new()
 table.remove(allGameObjects)  -- don't want prototype in object list
@@ -14,7 +11,7 @@ function Ball:new(x, y, speedx, speedy, maxspeedx, maxspeedy, width, height, col
     return obj
 end
 
--- player denotes which direction the ball will spawn travelling towards
+-- player :: denotes which direction the spawned ball will travel
 function Ball:spawnBall(player)
     local maxspeedxy = 570
     local dir = player == player1 and -1 or 1
@@ -24,15 +21,7 @@ function Ball:spawnBall(player)
 end
 Ball:spawnBall(player1)
 
---[[
-function Ball:draw()    -- overwrite parent default: rectangle
-    love.graphics.setColor(self.color[1],self.color[2],self.color[3],self.color[4])
-    love.graphics.circle("fill", self.x, self.y, self.height/2, 50)
-end
---]]
-
 function Ball.bounce()
-    --local bassBounce = love.audio.newSource("sounds/deep-bass-bounce.wav", "static")
     local bassBounce = love.audio.newSource("sounds/ball-bounce.mp3", "static")
     table.insert(soundQueue, bassBounce)
 end

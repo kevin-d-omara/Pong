@@ -7,12 +7,16 @@ require "Selector"
 
 menu = {}
 
--- TODO: update this comment block
---[[ format for each page (i.e. menu.pages.menu, menu.pages.options, etc):
-    {string, x position, y position, color {r,g,b,a}, font, *true/false/nil}
-    true = currently selected
-    false = not currently selected
-    nil   = not selectable (i.e. title of page)
+--[[ Arguments:
+text = string to be displayed
+x, y = positions on screen
+color = {r,g,b,a}
+font = font to use
+selected = *true/false/nil
+    -> true  = currently selected
+    -> false = not currently selected
+    -> nil   = not selectable (i.e. title of page)
+
 --]]
 function menu.entry(text, x, y, color, font, selected)
     local obj = {}
@@ -80,14 +84,14 @@ menu.pages.options.selector = Selector:new(menu.pages.options)
 --[[ Arguments:
     - entry: entry of a page (i.e. menu.pages.controlsP1[2]
     - text: i.e. "Up" or "Down"
-    - dir: i.e. "up" or "down"
     - player: i.e. player1 or player2 (object pointers)
 --]]
 ---[[
-function enterNewControl(entry, text, dir, player)
+function enterNewControl(entry, text, player)
     return function()
         entry.text = text.." = '_'"
         oldKeyPressedFunction = love.keypressed
+        local dir = text == "Up" and "up" or "down"
         function love.keypressed(key)  -- overwrite keypressed function => capture next keystroke as new key for control
             if key ~= nil then
                 player.control[dir] = key
@@ -102,17 +106,17 @@ end
 -- controls player 1
 table.insert(menu.pages.controlsP1, menu.entry("Player 1 Controls", 0, 70, {255,255,255,255}, titleFont, nil))
 table.insert(menu.pages.controlsP1, menu.entry("Up = '"..player1.control.up.."'", 0, 160, {255,255,255,255}, optionFont, true))
-    menu.pages.controlsP1[2].key.enter = enterNewControl(menu.pages.controlsP1[2], "Up", "up", player1)
+    menu.pages.controlsP1[2].key.enter = enterNewControl(menu.pages.controlsP1[2], "Up", player1)
 table.insert(menu.pages.controlsP1, menu.entry("Down = '"..player1.control.down.."'", 0, 230, {255,255,255,255}, optionFont, false))
-    menu.pages.controlsP1[3].key.enter = enterNewControl(menu.pages.controlsP1[3], "Down", "down", player1)
+    menu.pages.controlsP1[3].key.enter = enterNewControl(menu.pages.controlsP1[3], "Down", player1)
 menu.pages.controlsP1.selector = Selector:new(menu.pages.controlsP1)
 
 -- controls player 2
 table.insert(menu.pages.controlsP2, menu.entry("Player 2 Controls", 0, 70, {255,255,255,255}, titleFont, nil))
 table.insert(menu.pages.controlsP2, menu.entry("Up = '"..player2.control.up.."'", 0, 160, {255,255,255,255}, optionFont, true))
-    menu.pages.controlsP2[2].key.enter = enterNewControl(menu.pages.controlsP2[2], "Up", "up", player2)
+    menu.pages.controlsP2[2].key.enter = enterNewControl(menu.pages.controlsP2[2], "Up", player2)
 table.insert(menu.pages.controlsP2, menu.entry("Down = '"..player2.control.down.."'", 0, 230, {255,255,255,255}, optionFont, false))
-    menu.pages.controlsP2[3].key.enter = enterNewControl(menu.pages.controlsP2[3], "Down", "down", player2)
+    menu.pages.controlsP2[3].key.enter = enterNewControl(menu.pages.controlsP2[3], "Down", player2)
 menu.pages.controlsP2.selector = Selector:new(menu.pages.controlsP2)
 
 menu.pages.previous = {}  -- this is a stack
@@ -149,8 +153,3 @@ end
 function menu.highlight(text)
     return "-->   "..text.."   <--"
 end
-
-function menu.changePage()
-end
-
---local score = string.format("%.2d   %.2d", player1.score, player2.score)
