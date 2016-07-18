@@ -5,7 +5,7 @@ function checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)   -- AABB bounding box
          y2 < y1+h1
 end
 
-function checkForCollisions()
+function checkForCollisions(dt)
     -- ball -> paddle
     for _, player in ipairs(allPlayers) do
         local paddle = player.paddle
@@ -32,9 +32,14 @@ function checkForCollisions()
                 m = ball.maxspeedy * (.5) / p4      -- (4/5 - 3/10)
                 b = ball.maxspeedy * (-.2)          -- (2 * 3/10 - 4/5)
             end
-            ball.speedy = m * math.abs(bMid) + b      -- "f(x) = m*x + b"
+            ball.speedy = m * math.abs(bMid) + b    -- "f(x) = m*x + b"
             local sign = paddle == paddle1 and 1 or -1
-            ball.x = paddle.x + sign * (paddle.width + 1)
+            
+            -- prevent ball from getting stuck in paddle
+            ball:move(dt)
+            if checkCollision(ball.x,ball.y,ball.width,ball.height, paddle.x, paddle.y, paddle.width, paddle.height) then
+                ball.x = paddle.x + sign * (paddle.width + 1)
+            end
         end
     end    
     
