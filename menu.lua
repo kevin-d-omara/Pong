@@ -1,5 +1,7 @@
 -- graphics
---keys_wasd = love.graphics.newImage("graphics/keys_cluster_wasd.png")
+keys_arrow     = love.graphics.newImage("graphics/keys_cluster_arrow.png")
+keys_backspace = love.graphics.newImage("graphics/key_wide_backspace.png")
+keys_enter     = love.graphics.newImage("graphics/key_wide_enter.png")
 
 require "Selector"
 

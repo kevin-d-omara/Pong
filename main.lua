@@ -1,16 +1,9 @@
 --[[
     By Kevin O'Mara
-    Version 0.3.4
+    Version 0.3.5
 --]]
 
 -- based on: http://www.ponggame.org/
-
--- TODO:
---      - shader at gameover
---      - background??
---      - 'package' up; test cross platform-ness via Linux
---      ???
---      profit
 
 function love.load()
     -- queues
@@ -127,9 +120,19 @@ function love.draw()
         local score = string.format("%.2d   %.2d", player1.score, player2.score)
         love.graphics.setColor(204,0,204,255)
         love.graphics.printf(score, 0, 35, window.width, 'center')
+        
     elseif gamestate == "menu" then
         menu.display(menu.pages.current)
-        --love.graphics.draw(keys_wasd, 0, 0, 0, .1, .1)
+        
+        -- show menu controls:
+        love.graphics.setFont(subOptionFont)
+        love.graphics.draw(keys_arrow, 0, 0, 0, .1, .1)     -- left side
+        love.graphics.print("menu control", 10, 100)
+        love.graphics.draw(keys_enter, 568, 2, 0, .1, .1)   -- right side
+        love.graphics.print("select", 578, 52)
+        love.graphics.draw(keys_backspace, 568, 92, 0, .1, .1)
+        love.graphics.print("go back", 568, 142)
+        
     elseif gamestate == "gameover" then
         love.graphics.setColor(255,255,255,255)
         love.graphics.setFont(gameoverFont)
