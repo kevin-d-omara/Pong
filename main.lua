@@ -1,6 +1,6 @@
 --[[
     By Kevin O'Mara
-    Version 0.4.0
+    Version 0.5.0
 --]]
 
 -- based on: http://www.ponggame.org/
@@ -28,12 +28,44 @@ end
 
 function love.keypressed(key, _, isrepeat)
     if gamestate == "ingame" then
-        -- do nothing
+        if isPaused then
+            if key == pauseButton then
+                allSongs:unPause()
+                isPaused = false
+            elseif key == 'space' then
+                allGameObjects:remove(ball)
+                resetGame()
+                allSongs:unPause()
+                gamestate = "ingame"
+                isPaused = false
+            elseif key == 'backspace' then
+                allGameObjects:remove(ball)
+                resetGame()
+                -- fade ingame music over to menu music
+                music.fadeOut(music.current, .6)
+                music.fadeIn(music.intro, .6)
+                music.current = music.intro
+                gamestate = "menu"
+                isPaused = false
+            elseif key == 'tab' then
+                love.event.quit()
+            end
+        else -- not paused
+            if key == pauseButton then
+                allSongs:pause()
+                isPaused = true
+            end 
+        end
     elseif gamestate == "menu" then
         menu.keypressed(key)
     elseif gamestate == "gameover" then
         if key == 'space' then
             resetGame()
+            -- fade ingame music over to menu music
+            music.fadeOut(music.current, .6)
+            music.fadeIn(music.ingameAmbience, .6)
+            music.current = music.ingameAmbience
+            
             gamestate = "ingame"
         elseif key == 'backspace' then
             resetGame()
@@ -59,34 +91,34 @@ function resetGame()
 end
 
 function love.update(dt)
-    --[[ events
-    for k, event in ipairs(eventQueue) do
-        if event() == false then
-            table.remove(eventQueue, k)
-        end
-    end
-    --]]
-    
     if gamestate == "ingame" then
-        -- player input
-        for _, player in ipairs(allPlayers) do
-            player:checkIfKeyIsDown(dt)
-        end
-        
-        -- update screen positions
-        for _, obj in ipairs(allGameObjects) do
-            obj:move(dt)
-        end
-        
-        checkForCollisions(dt)
-        
-        -- check win condition
-        if player1.score >= maxScore or player2.score >= maxScore then
-            gamestate = "gameover"
-            winner = player1.score >= maxScore and player1 or player2
-            for k, v in ipairs(allGameObjects) do
-                if v == ball then table.remove(allGameObjects, k) end   -- remove ball
+        if isPaused then
+            -- do nothing
+        else -- not paused
+            -- player input
+            for _, player in ipairs(allPlayers) do
+                player:checkIfKeyIsDown(dt)
             end
+            
+            -- update screen positions
+            for _, obj in ipairs(allGameObjects) do
+                obj:move(dt)
+            end
+            
+            checkForCollisions(dt)
+            
+            -- check win condition
+            if player1.score >= maxScore or player2.score >= maxScore then
+                gamestate = "gameover"
+                winner = player1.score >= maxScore and player1 or player2
+                for k, v in ipairs(allGameObjects) do
+                    if v == ball then table.remove(allGameObjects, k) end   -- remove ball
+                end
+                -- fade sounds
+                music.fadeOut(music.current, .6)
+                music.fadeIn(music.gameEnd, .6)
+                music.current = music.gameEnd
+            end 
         end
     elseif gamestate == "menu" then
         -- do nothing
@@ -121,18 +153,25 @@ function love.draw()
         love.graphics.setColor(204,0,204,255)
         love.graphics.printf(score, 0, 35, window.width, 'center')
         
+        if isPaused then
+            love.graphics.setColor(255,153,0,255)
+            love.graphics.printf("PAUSED", 135, 70, window.width, 'center')
+            
+            love.graphics.setFont(optionFont)
+            love.graphics.printf("Restart?", 135, 145, window.width, 'center')
+            love.graphics.printf("Menu", 135, 225, window.width, 'center')
+            love.graphics.printf("Exit", 135, 305, window.width, 'center')
+            
+            love.graphics.setFont(subOptionFont)
+            love.graphics.printf("(spacebar)", 135, 185, window.width, 'center')
+            love.graphics.printf("(backspace)", 135, 265, window.width, 'center')
+            love.graphics.printf("(tab)", 135, 345, window.width, 'center')
+        end
+        
     elseif gamestate == "menu" then
         menu.display(menu.pages.current)
-        
-        -- show menu controls:
-        love.graphics.setFont(subOptionFont)
-        love.graphics.draw(keys_arrow, 0, 0, 0, .1, .1)     -- left side
-        love.graphics.print("menu control", 10, 100)
-        love.graphics.draw(keys_enter, 568, 2, 0, .1, .1)   -- right side
-        love.graphics.print("select", 578, 52)
-        love.graphics.draw(keys_backspace, 568, 92, 0, .1, .1)
-        love.graphics.print("go back", 568, 142)
-        
+        menu.showControls()
+
     elseif gamestate == "gameover" then
         love.graphics.setColor(255,255,255,255)
         love.graphics.setFont(gameoverFont)
@@ -149,7 +188,6 @@ function love.draw()
         love.graphics.printf("(backspace)", 135*offset, 265, window.width, 'center')
         love.graphics.printf("(escape)", 135*offset, 345, window.width, 'center')
         
-        -- shader to fade these; or just adjust alpha :P)
         for _, obj in ipairs(allGameObjects) do
             obj:draw()
         end

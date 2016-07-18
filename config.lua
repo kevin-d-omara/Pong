@@ -12,3 +12,5 @@ optionFont = love.graphics.newFont(28)
 subOptionFont = love.graphics.newFont(20)
 
 maxScore = 10
+
+pauseButton = "escape"

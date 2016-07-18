@@ -14,6 +14,18 @@ function allSongs:setVolume(vol)
     end
 end
 
+function allSongs:pause()
+    for _, v in ipairs(allSongs) do
+        if v.song:isPlaying() then v.song:pause() end
+    end
+end
+
+function allSongs:unPause()
+    for _, v in ipairs(allSongs) do
+        if v.song:isPaused() then v.song:play() end
+    end
+end
+
 function newSong(path, min, max)
     local song = love.audio.newSource(path)
     song:setVolumeLimits(min, max)
@@ -28,6 +40,7 @@ music.intro = newSong("sounds/intro.wav", 0, .4)
     music.current = music.intro
 music.ingameAmbience = newSong("sounds/ingame-ambience.wav", 0, .6)    
 music.gameEnd = newSong("sounds/game-end.wav", 0, 1)
+    music.gameEnd:setLooping(false)
 
 musicQueue = {}     -- to control fade in/out effects
 
