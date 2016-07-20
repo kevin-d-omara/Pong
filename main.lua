@@ -1,6 +1,6 @@
 --[[
     By Kevin O'Mara
-    Version 0.5.0
+    Version 1.0.0
 --]]
 
 -- based on: http://www.ponggame.org/
