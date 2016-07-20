@@ -6,7 +6,7 @@ How to play
 
 Menu controls:
 
-* Use the arrow keys or wasd keys to browse the different menu options
+* Use the arrow keys or wasd keys to navigate the menu options
 * Press Enter to select the highlighted option
 * Press Backspace, Tab, or Escape to go back to the previous menu
 
