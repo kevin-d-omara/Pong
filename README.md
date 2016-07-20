@@ -1,7 +1,22 @@
 # Pong
 Pong written in Lua using the LÖVE game engine.
 
-How to play
+How to Run
+==========
+
+Windows:
+
+* Download the version that matches your machine (32-bit or 64-bit) (i.e. pong-1.X.X-win32.zip)
+* Unzip the file
+* Double-click the executable (i.e. pong-1.X.X-win32.exe)
+
+Linux:
+
+* Download pong-1.X.X-linux.love
+* Install LÖVE: https://love2d.org/
+* Double-click the .love file
+
+How to Play
 ===========
 
 Menu controls:
