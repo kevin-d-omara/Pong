@@ -6,7 +6,7 @@ How to Run
 
 Windows:
 
-* Download the version that matches your machine (32-bit or 64-bit) (i.e. pong-1.X.X-win32.zip)
+* Download the 32- or 64-bit version according to your machine (i.e. pong-1.X.X-win32.zip)
 * Unzip the file
 * Double-click the executable (i.e. pong-1.X.X-win32.exe)
 
@@ -15,6 +15,13 @@ Linux:
 * Download pong-1.X.X-linux.love
 * Install LÖVE: https://love2d.org/
 * Double-click the .love file
+
+OS X:
+
+* Download pong-1.X.X-osx64.zip
+* Unzip the file
+* Double-click the app (i.e. pong-1.X.X.app)
+* Note: the first time you run the game, you may instead need to Ctrl-Click (right click) > Open
 
 How to Play
 ===========
